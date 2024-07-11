@@ -23,31 +23,59 @@ namespace bART_Tasks.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAccounts()
         {
-            var accounts = await _accountRepository.GetAccountsAsync();
+            try
+            {
+                var accounts = await _accountRepository.GetAccountsAsync();
 
-            return Ok(_mapper.Map<List<AccountDTO>>(accounts));
+                return Ok(_mapper.Map<List<AccountDTO>>(accounts));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpGet]
         [Route("{Id}")]
         public async Task<IActionResult> GetAccount(int Id)
         {
-            var account = await _accountRepository.GetAccountAsync(Id);
+            try
+            {
+                var account = await _accountRepository.GetAccountAsync(Id);
 
-            return Ok(_mapper.Map<AccountDTO>(account));
+                return Ok(_mapper.Map<AccountDTO>(account));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            } 
         }
         [HttpPost]
         public async Task<IActionResult> CreateAccount(AccountRequest accountDto)
         {
-            var createdAccount = await _accountRepository.CreateAccountAsync(_mapper.Map<Account>(accountDto), accountDto.ContactId);
+            try
+            {
+                var createdAccount = await _accountRepository.CreateAccountAsync(_mapper.Map<Account>(accountDto), accountDto.ContactId);
 
-            return Ok(_mapper.Map<AccountDTO>(createdAccount));
+                return Ok(_mapper.Map<AccountDTO>(createdAccount));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            } 
         }
         [HttpPatch]
         public async Task<IActionResult> LinkToAccount(AccountLinkRequest accountLink)
         {
-            var updatedAccount = await _accountRepository.LinkContactIntoAccount(accountLink.AccountId, accountLink.ContactId);
+            try
+            {
+                var updatedAccount = await _accountRepository.LinkContactIntoAccount(accountLink.AccountId, accountLink.ContactId);
 
-            return Ok(_mapper.Map<AccountDTO>(updatedAccount));
+                return Ok(_mapper.Map<AccountDTO>(updatedAccount));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

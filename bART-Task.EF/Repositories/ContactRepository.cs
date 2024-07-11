@@ -22,13 +22,6 @@ namespace bART_Task.EF.Repositories
             return createdContact;
         }
 
-        public async Task DeleteContactAsync(int contactId)
-        {
-            Contact contact = _dbContactService.GetByIdforUser(contactId) ?? throw new Exception($"Contact with Id: {contactId} not found");
-
-            await _dbContactService.Delete(contact);
-        }
-
         public async Task<Contact> GetContactAsync(int contactId)
         {
             Contact contact = await _dbContext.Set<Contact>()

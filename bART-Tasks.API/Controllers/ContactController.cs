@@ -21,24 +21,45 @@ namespace bART_Tasks.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetContacts()
         {
-            var contacts = await _contactRepository.GetContactsAsync();
+            try
+            {
+                var contacts = await _contactRepository.GetContactsAsync();
 
-            return Ok(_mapper.Map<List<ContactDTO>>(contacts));
+                return Ok(_mapper.Map<List<ContactDTO>>(contacts));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            } 
         }
         [HttpGet]
         [Route("{Id}")]
         public async Task<IActionResult> GetContact(int Id)
         {
-            var contact = await _contactRepository.GetContactAsync(Id);
+            try
+            {
+                var contact = await _contactRepository.GetContactAsync(Id);
 
-            return Ok(_mapper.Map<ContactDTO>(contact));
+                return Ok(_mapper.Map<ContactDTO>(contact));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }   
         }
         [HttpPost]
         public async Task<IActionResult> CreateContact(ContactDTO contactDto)
         {
-            var createdContact = await _contactRepository.CreateContactAsync(_mapper.Map<Contact>(contactDto));
+            try
+            {
+                var createdContact = await _contactRepository.CreateContactAsync(_mapper.Map<Contact>(contactDto));
 
-            return Ok(_mapper.Map<ContactDTO>(createdContact));
+                return Ok(_mapper.Map<ContactDTO>(createdContact));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

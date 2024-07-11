@@ -23,24 +23,24 @@ namespace bART_Tasks.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateIncident(IncidentRequest request)
         {
-            Incident incidentDto = new Incident()
+            try
             {
-                Description = request.IncidentDescription,
-                Account = new Account()
+                Incident incidentDto = new Incident()
                 {
-                    Name = request.AccountName,
-                    Contacts = new List<Contact>(){
+                    Description = request.IncidentDescription,
+                    Account = new Account()
+                    {
+                        Name = request.AccountName,
+                        Contacts = new List<Contact>(){
                         new Contact(){
                             FirstName = request.FirstName,
                             LastName = request.LastName,
                             Email = request.Email,
                         }
                     }
-                }
-            };
+                    }
+                };
 
-            try
-            {
                 Incident createdIncident = await _incidentRepository.CreateIncidentAsync(incidentDto, request.Email);
 
                 return Ok(_mapper.Map<IncidentDTO>(createdIncident));
@@ -58,17 +58,34 @@ namespace bART_Tasks.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetIncidents()
         {
-            var incidents = await _incidentRepository.GetIncidentsAsync();
+            try
+            {
+                var incidents = await _incidentRepository.GetIncidentsAsync();
 
-            return Ok(_mapper.Map<List<IncidentDTO>>(incidents));
+                return Ok(_mapper.Map<List<IncidentDTO>>(incidents));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpGet]
         [Route("{Id}")]
         public async Task<IActionResult> GetIncident(string Id)
         {
-            var incident = await _incidentRepository.GetIncidentAsync(Id);
+            if (string.IsNullOrEmpty(Id))
+                return BadRequest("Incident ID cannot be null or empty.");
+            
+            try
+            {
+                var incident = await _incidentRepository.GetIncidentAsync(Id);
 
-            return Ok(_mapper.Map<IncidentDTO>(incident));
+                return Ok(_mapper.Map<IncidentDTO>(incident));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
