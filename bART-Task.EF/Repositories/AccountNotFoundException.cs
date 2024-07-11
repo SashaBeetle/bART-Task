@@ -1,6 +1,5 @@
 ﻿using System.Runtime.Serialization;
 
-
 namespace bART_Task.EF.Repositories
 {
     [Serializable]

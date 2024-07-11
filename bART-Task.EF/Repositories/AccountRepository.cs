@@ -27,13 +27,6 @@ namespace bART_Task.EF.Repositories
             return createdAccount;
         }
 
-        public async Task DeleteAccountAsync(int accountId)
-        {
-            Account account = _dbAccountService.GetByIdforUser(accountId) ?? throw new Exception($"Account with Id: {accountId} not found");
-
-            await _dbAccountService.Delete(account);
-        }
-
         public async Task<Account> GetAccountAsync(int accountId)
         {
             Account account = await _dbContext.Set<Account>()
@@ -56,9 +49,9 @@ namespace bART_Task.EF.Repositories
             return account;
         }
 
-        public async Task<Account> LinkContactIntoAccount(int accountId, int cintactId)
+        public async Task<Account> LinkContactIntoAccount(int accountId, int contactId)
         {
-            Contact contact = _dbContactService.GetByIdforUser(cintactId) ?? throw new Exception($"Contact with Id: {cintactId} not found");
+            Contact contact = _dbContactService.GetByIdforUser(contactId) ?? throw new Exception($"Contact with Id: {contactId} not found");
             Account account = await _dbContext.Set<Account>()
                                 .Include(p => p.Contacts!)
                                 .FirstOrDefaultAsync(o => o.Id == accountId) ?? throw new Exception($"Account with Id: {accountId} not found");

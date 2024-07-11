@@ -7,15 +7,12 @@ namespace bART_Task.EF.Repositories
     public class IncidentRepository : IIncidentRepository
     {
         private readonly bARTTaskContext _dbContext;
-        private readonly IDbEntityService<Account> _dbAccountService;
         private readonly IAccountRepository _accountRepository;
         public IncidentRepository(
             bARTTaskContext dbContext, 
-            IDbEntityService<Account> dbAccountService,
             IAccountRepository accountRepository)
         {
             _dbContext = dbContext;
-            _dbAccountService = dbAccountService;
             _accountRepository = accountRepository;
         }
 
@@ -42,14 +39,6 @@ namespace bART_Task.EF.Repositories
             await _dbContext.SaveChangesAsync();
 
             return createdIncident.Entity;
-        }
-
-        public async Task DeleteIncidentAsync(string incidentId)
-        {
-            Incident contact = await _dbContext.Set<Incident>().FirstOrDefaultAsync(x => x.Name == incidentId) ?? throw new Exception($"Incident with Id: {incidentId} not found");
-
-            _dbContext.Set<Incident>().Remove(contact);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Incident> GetIncidentAsync(string incidentId)
